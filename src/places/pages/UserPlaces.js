@@ -11,8 +11,8 @@ const DUMMY_PLACES = [
     imageUrl: 'https://bit.ly/396w3Wx',
     address: 'West 34th Street, New York, NY, USA',
     location: {
-      lat: 40.7491775,
-      lng: -73.9928418
+      lat: 40.748441,
+      lng: -73.9856673
     },
     creator: 'u1'
   },
