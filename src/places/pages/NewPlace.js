@@ -1,67 +1,32 @@
-import React, { useCallback, useReducer } from 'react'
+import React from 'react'
 
 import Input from '../../shared/components/FormElements/Input'
 import Button from '../../shared/components/FormElements/Button'
-
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
 } from '../../shared/utils/validators'
+import useForm from '../../shared/hooks/useForm'
 
-import './NewPlace.css'
+import './PlaceForm.css'
 
-const initialState = {
-  inputs: {
-    title: {
-      value: '',
-      isValid: false,
-    },
-    description: {
-      value: '',
-      isValid: false,
-    },
-    address: {
-      value: '',
-      isValid: false,
-    },
+const initialInputs = {
+  title: {
+    value: '',
+    isValid: false,
   },
-  isValid: false,
-}
-
-const formReducer = (state, { type, payload }) => {
-  switch (type) {
-    case 'INPUT_CHANGE':
-      let formIsValid = true
-      for (const inputId in state.inputs) {
-        if (inputId === payload.id) {
-          formIsValid = formIsValid && payload.isValid
-        } else {
-          formIsValid = formIsValid && state.inputs[inputId].isValid
-        }
-      }
-      return {
-        ...state,
-        inputs: {
-          ...state.inputs,
-          [payload.id]: {
-            value: payload.value,
-            isValid: payload.isValid,
-          },
-        },
-        isValid: formIsValid,
-      }
-
-    default:
-      return state
-  }
+  description: {
+    value: '',
+    isValid: false,
+  },
+  address: {
+    value: '',
+    isValid: false,
+  },
 }
 
 const NewPlace = () => {
-  const [formState, dispatch] = useReducer(formReducer, initialState)
-
-  const inputHandler = useCallback((id, value, isValid) => {
-    dispatch({ type: 'INPUT_CHANGE', payload: { id, value, isValid } })
-  }, [])
+  const [formState, inputHandler] = useForm(initialInputs, false)
 
   const placeSubmitHandler = event => {
     event.preventDefault()
@@ -82,7 +47,7 @@ const NewPlace = () => {
       <Input
         id='description'
         element='textarea'
-        label='Title'
+        label='Description'
         validators={[VALIDATOR_MINLENGTH(5)]}
         errorText='Please enter a valid description (at least 5 characters).'
         onInput={inputHandler}

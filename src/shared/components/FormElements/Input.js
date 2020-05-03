@@ -3,12 +3,6 @@ import React, { useReducer, useEffect } from 'react'
 import { validate } from '../../utils/validators'
 import './Input.css'
 
-const initialState = {
-  value: '',
-  isValid: false,
-  isTouched: false,
-}
-
 const inputReducer = (state, { type, payload }) => {
   switch (type) {
     case 'CHANGE':
@@ -30,22 +24,29 @@ const inputReducer = (state, { type, payload }) => {
 }
 
 const Input = props => {
-  const [inputState, dispatch] = useReducer(inputReducer, initialState)
-
   const {
     element,
     errorText,
     id,
+    initialValid,
     label,
     onInput,
     placeholder,
     rows,
     type,
     validators,
+    initialValue
   } = props
 
-  const { value, isValid, isTouched } = inputState
+  const initialState = {
+    value: initialValue || '',
+    isValid: initialValid || false,
+    isTouched: false,
+  }
+  
+  const [inputState, dispatch] = useReducer(inputReducer, initialState)
 
+  const { value, isValid, isTouched } = inputState
   useEffect(() => {
     onInput(id, value, isValid)
   }, [id, value, isValid, onInput])
