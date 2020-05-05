@@ -4,7 +4,7 @@ import Input from '../../shared/components/FormElements/Input'
 import Button from '../../shared/components/FormElements/Button'
 import {
   VALIDATOR_REQUIRE,
-  VALIDATOR_MINLENGTH,
+  VALIDATOR_MINLENGTH
 } from '../../shared/utils/validators'
 import useForm from '../../shared/hooks/useForm'
 
@@ -13,16 +13,16 @@ import './PlaceForm.css'
 const initialInputs = {
   title: {
     value: '',
-    isValid: false,
+    isValid: false
   },
   description: {
     value: '',
-    isValid: false,
+    isValid: false
   },
   address: {
     value: '',
-    isValid: false,
-  },
+    isValid: false
+  }
 }
 
 const NewPlace = () => {

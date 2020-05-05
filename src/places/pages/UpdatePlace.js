@@ -77,7 +77,6 @@ const UpdatePlace = () => {
             isValid: true,
           },
         },
-        //TODO: Is last "true" value necessary?
         true
       )
     }
