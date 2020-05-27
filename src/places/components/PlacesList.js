@@ -3,9 +3,10 @@ import React from 'react'
 import Card from '../../shared/components/UIElements/Card'
 import Button from '../../shared/components/FormElements/Button'
 import PlaceItem from './PlaceItem'
+
 import './PlacesList.css'
 
-const PlacesList = ({ items }) => {
+const PlacesList = ({ items, onDeletePlace }) => {
   if (items.length === 0) {
     return (
       <div className='place-list center'>
@@ -24,11 +25,12 @@ const PlacesList = ({ items }) => {
           key={place.id}
           id={place.id}
           title={place.title}
-          image={place.imageUrl}
+          image={place.image}
           address={place.address}
           creatorId={place.creator}
           description={place.description}
           coordinates={place.location}
+          onDelete={onDeletePlace}
         />
       ))}
     </ul>

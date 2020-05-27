@@ -5,23 +5,27 @@ import {
   Redirect,
   Switch
 } from 'react-router-dom'
+
+import Auth from './user/pages/Auth'
 import Users from './user/pages/Users'
 import NewPlace from './places/pages/NewPlace'
-import UpdatePlace from './places/pages/UpdatePlace'
 import UserPlaces from './places/pages/UserPlaces'
+import UpdatePlace from './places/pages/UpdatePlace'
 import MainNavigation from './shared/components/Navigation/MainNavigation'
-import Auth from './user/pages/Auth'
 import { AuthContext } from './shared/context/authContext'
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userId, setUserId] = useState(null)
 
-  const login = useCallback(() => {
+  const login = useCallback(userId => {
     setIsLoggedIn(true)
+    setUserId(userId)
   }, [])
 
   const logout = useCallback(() => {
     setIsLoggedIn(false)
+    setUserId(null)
   }, [])
 
   let customRoutes
@@ -48,7 +52,7 @@ const App = () => {
   }
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, userId, login, logout }}>
       <Router>
         <MainNavigation />
         <main>{customRoutes}</main>

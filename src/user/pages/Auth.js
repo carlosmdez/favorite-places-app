@@ -1,17 +1,18 @@
 import React, { useState, useContext } from 'react'
 
-import Input from '../../shared/components/FormElements/Input'
-import Button from '../../shared/components/FormElements/Button'
 import Card from '../../shared/components/UIElements/Card'
 import ErrorModal from '../../shared/components/UIElements/ErrorModal'
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
+import Input from '../../shared/components/FormElements/Input'
+import Button from '../../shared/components/FormElements/Button'
 import useForm from '../../shared/hooks/useForm'
 import useHttpClient from '../../shared/hooks/useHttpClient'
 import { AuthContext } from '../../shared/context/authContext'
 import { LOGIN_URL, SIGNUP_URL } from '../../shared/constants'
 import {
   VALIDATOR_EMAIL,
-  VALIDATOR_REQUIRE
+  VALIDATOR_REQUIRE,
+  VALIDATOR_MINLENGTH
 } from '../../shared/utils/validators'
 
 import './Auth.css'
@@ -65,11 +66,12 @@ const Auth = () => {
           email: formState.inputs.email.value,
           password: formState.inputs.password.value
         })
-      ).then(res => {
-        console.log(res)
-        auth.login()
-      })
-      .catch(err => console.log(err))
+      )
+        .then(res => {
+          console.log(res)
+          auth.login(res.user.id)
+        })
+        .catch(err => console.log(err))
     } else {
       sendRequest(
         SIGNUP_URL,
@@ -80,11 +82,11 @@ const Auth = () => {
           email: formState.inputs.email.value,
           password: formState.inputs.password.value
         })
-      ).then(res => {
-        console.log(res)
-        auth.login()
-      })
-      .catch(err => console.log(err))
+      )
+        .then(res => {
+          auth.login(res.user.id)
+        })
+        .catch(err => console.log(err))
     }
   }
 
@@ -121,8 +123,8 @@ const Auth = () => {
             element='input'
             type='password'
             label='Password'
-            validators={[VALIDATOR_REQUIRE()]}
-            errorText='Please enter a valid password.'
+            validators={[VALIDATOR_MINLENGTH(6)]}
+            errorText='Please enter a valid password, at least 6 characters.'
             onInput={inputHandler}
           />
           <Button type='submit' disabled={!formState.isValid}>

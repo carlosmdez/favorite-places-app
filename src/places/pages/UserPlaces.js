@@ -1,40 +1,45 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import PlacesList from '../components/PlacesList'
+import ErrorModal from '../../shared/components/UIElements/ErrorModal'
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
 
-const DUMMY_PLACES = [
-  {
-    id: 'p1',
-    title: 'Empire State Building',
-    description: 'An amazing place to eat.',
-    imageUrl: 'https://bit.ly/396w3Wx',
-    address: 'West 34th Street, New York, NY, USA',
-    location: {
-      lat: 40.748441,
-      lng: -73.9856673
-    },
-    creator: 'u1'
-  },
-  {
-    id: 'p2',
-    title: 'Empire State Building',
-    description: 'An amazing place to eat.',
-    imageUrl: 'https://bit.ly/396w3Wx',
-    address: 'West 34th Street, New York, NY, USA',
-    location: {
-      lat: 40.7491775,
-      lng: -73.9928418
-    },
-    creator: 'u2'
-  }
-]
+import useHttpClient from '../../shared/hooks/useHttpClient'
+import { GET_PLACES_URL } from '../../shared/constants'
 
 const UserPlaces = () => {
   const userId = useParams().userId
-  const loadedPlaces = DUMMY_PLACES.filter(place => place.creator === userId)
-  
-  return <PlacesList items={loadedPlaces} />
+  const { isLoading, error, sendRequest, clearError } = useHttpClient()
+  const [places, setPlaces] = useState([])
+
+  useEffect(() => {
+    sendRequest(`${GET_PLACES_URL}/${userId}`)
+      .then(data => {
+        setPlaces(data.places)
+      })
+      .catch(err => console.log(err))
+  }, [sendRequest, userId])
+
+  const placeDeletedHandler = deletedPlaceId => {
+    setPlaces(prevPlaces =>
+      prevPlaces.filter(place => place.id !== deletedPlaceId)
+    )
+  }
+
+  return (
+    <>
+      <ErrorModal error={error} onClear={clearError} />
+      {isLoading && (
+        <div className='center'>
+          <LoadingSpinner />
+        </div>
+      )}
+      {!isLoading && places && (
+        <PlacesList items={places} onDeletePlace={placeDeletedHandler} />
+      )}
+    </>
+  )
 }
 
 export default UserPlaces
