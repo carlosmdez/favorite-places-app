@@ -33,10 +33,8 @@ const PlaceItem = props => {
   const cancelConfirmModalHandler = () => setShowConfirmModal(false)
   const confirmDeleteHandler = () => {
     setShowConfirmModal(false)
-    console.log('DELETING...')
     sendRequest(`${DELETE_PLACE_URL}/${id}`, 'DELETE')
       .then(res => {
-        console.log('Place deleted successfully')
         props.onDelete(id)
       })
       .catch(err => console.log(err))

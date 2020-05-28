@@ -69,7 +69,6 @@ const UpdatePlace = () => {
       })
     )
       .then(res => {
-        console.log('Place updated successfully')
         history.push(`/${auth.userId}/places`)
       })
       .catch(err => console.log(err))

@@ -13,7 +13,6 @@ const Users = () => {
   useEffect(() => {
     sendRequest(GET_USERS_URL)
       .then(res => {
-        console.log(res)
         setUsers(res.users)
       })
       .catch(err => console.log(err))

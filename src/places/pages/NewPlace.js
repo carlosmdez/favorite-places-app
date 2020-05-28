@@ -52,7 +52,6 @@ const NewPlace = () => {
       })
     )
       .then(res => {
-        console.log('Place created successfully')
         history.push('/')
       })
       .catch(err => console.log(err))
