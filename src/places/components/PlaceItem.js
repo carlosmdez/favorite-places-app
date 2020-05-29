@@ -8,7 +8,7 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
 import Button from '../../shared/components/FormElements/Button'
 import useHttpClient from '../../shared/hooks/useHttpClient'
 import { AuthContext } from '../../shared/context/authContext'
-import { DELETE_PLACE_URL } from '../../shared/constants'
+import { DELETE_PLACE_URL, API_URL } from '../../shared/constants'
 
 import './PlaceItem.css'
 
@@ -78,7 +78,7 @@ const PlaceItem = props => {
         <Card className='place-item__content'>
           {isLoading && <LoadingSpinner asOverlay />}
           <div className='place-item__image'>
-            <img src={image} alt={title} />
+            <img src={`${API_URL}/${image}`} alt={title} />
           </div>
           <div className='place-item__info'>
             <h2>{title}</h2>

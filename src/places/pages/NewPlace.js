@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 
 import Input from '../../shared/components/FormElements/Input'
 import Button from '../../shared/components/FormElements/Button'
+import ImageUpload from '../../shared/components/FormElements/ImageUpload'
 import ErrorModal from '../../shared/components/UIElements/ErrorModal'
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
 import useForm from '../../shared/hooks/useForm'
@@ -28,6 +29,10 @@ const initialInputs = {
   address: {
     value: '',
     isValid: false
+  },
+  image: {
+    value: null,
+    isValid: false
   }
 }
 
@@ -40,17 +45,13 @@ const NewPlace = () => {
 
   const placeSubmitHandler = event => {
     event.preventDefault()
-    sendRequest(
-      CREATE_PLACE_URL,
-      'POST',
-      { 'Content-Type': 'application/json' },
-      JSON.stringify({
-        title: formState.inputs.title.value,
-        description: formState.inputs.description.value,
-        address: formState.inputs.address.value,
-        creator: auth.userId
-      })
-    )
+    const formData = new FormData()
+    formData.append('title', formState.inputs.title.value)
+    formData.append('description', formState.inputs.description.value)
+    formData.append('address', formState.inputs.address.value)
+    formData.append('image', formState.inputs.image.value)
+    formData.append('creator', auth.userId)
+    sendRequest(CREATE_PLACE_URL, 'POST', {}, formData)
       .then(res => {
         history.push('/')
       })
@@ -87,6 +88,11 @@ const NewPlace = () => {
           validators={[VALIDATOR_REQUIRE()]}
           errorText='Please enter a valid address.'
           onInput={inputHandler}
+        />
+        <ImageUpload
+          id='image'
+          onInput={inputHandler}
+          errorText='Please provide an image.'
         />
         <Button type='submit' disabled={!formState.isValid}>
           Add Place

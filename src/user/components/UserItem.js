@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 
 import Avatar from '../../shared/components/UIElements/Avatar'
 import Card from '../../shared/components/UIElements/Card'
+import { API_URL } from '../../shared/constants'
+
 import './UserItem.css'
 
 const UserItem = props => {
@@ -12,7 +14,7 @@ const UserItem = props => {
       <Card className='user-item__content'>
         <Link to={`/${id}/places`}>
           <div className='user-item__image'>
-            <Avatar image={image} alt={name} />
+            <Avatar image={`${API_URL}/${image}`} alt={name} />
           </div>
           <div className='user-item__info'>
             <h2>{name}</h2>

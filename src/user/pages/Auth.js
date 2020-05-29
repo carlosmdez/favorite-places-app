@@ -5,6 +5,7 @@ import ErrorModal from '../../shared/components/UIElements/ErrorModal'
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
 import Input from '../../shared/components/FormElements/Input'
 import Button from '../../shared/components/FormElements/Button'
+import ImageUpload from '../../shared/components/FormElements/ImageUpload'
 import useForm from '../../shared/hooks/useForm'
 import useHttpClient from '../../shared/hooks/useHttpClient'
 import { AuthContext } from '../../shared/context/authContext'
@@ -39,6 +40,7 @@ const Auth = () => {
     if (!isLoginMode) {
       const formWithoutName = { ...formState.inputs }
       delete formWithoutName.name
+      delete formWithoutName.image
       setFormData(formWithoutName, email.isValid && password.isValid)
     } else {
       setFormData(
@@ -46,6 +48,10 @@ const Auth = () => {
           ...formState.inputs,
           name: {
             value: '',
+            isValid: false
+          },
+          image: {
+            value: null,
             isValid: false
           }
         },
@@ -57,6 +63,7 @@ const Auth = () => {
 
   const authSubmitHandler = event => {
     event.preventDefault()
+    console.log(formState.inputs)
     if (isLoginMode) {
       sendRequest(
         LOGIN_URL,
@@ -68,21 +75,16 @@ const Auth = () => {
         })
       )
         .then(res => {
-          console.log(res)
           auth.login(res.user.id)
         })
         .catch(err => console.log(err))
     } else {
-      sendRequest(
-        SIGNUP_URL,
-        'POST',
-        { 'Content-Type': 'application/json' },
-        JSON.stringify({
-          name: formState.inputs.name.value,
-          email: formState.inputs.email.value,
-          password: formState.inputs.password.value
-        })
-      )
+      const formData = new FormData()
+      formData.append('name', formState.inputs.name.value)
+      formData.append('email', formState.inputs.email.value)
+      formData.append('password', formState.inputs.password.value)
+      formData.append('image', formState.inputs.image.value)
+      sendRequest(SIGNUP_URL, 'POST', {}, formData)
         .then(res => {
           auth.login(res.user.id)
         })
@@ -99,15 +101,23 @@ const Auth = () => {
         <hr />
         <form onSubmit={authSubmitHandler}>
           {!isLoginMode && (
-            <Input
-              id='name'
-              element='input'
-              type='text'
-              label='Name'
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText='Please enter a name.'
-              onInput={inputHandler}
-            />
+            <>
+              <Input
+                id='name'
+                element='input'
+                type='text'
+                label='Name'
+                validators={[VALIDATOR_REQUIRE()]}
+                errorText='Please enter a name.'
+                onInput={inputHandler}
+              />
+              <ImageUpload
+                id='image'
+                center
+                onInput={inputHandler}
+                errorText='Please provide an image.'
+              />
+            </>
           )}
           <Input
             id='email'
