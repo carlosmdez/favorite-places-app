@@ -33,7 +33,9 @@ const PlaceItem = props => {
   const cancelConfirmModalHandler = () => setShowConfirmModal(false)
   const confirmDeleteHandler = () => {
     setShowConfirmModal(false)
-    sendRequest(`${DELETE_PLACE_URL}/${id}`, 'DELETE')
+    sendRequest(`${DELETE_PLACE_URL}/${id}`, 'DELETE', {
+      Authorization: `Bearer ${auth.token}`
+    })
       .then(res => {
         props.onDelete(id)
       })
@@ -49,7 +51,8 @@ const PlaceItem = props => {
         contentClass='place-item__modal-content'
         footerClass='place-item__modal-actions'
         footer={<Button onClick={closeMapHandler}>Close</Button>}
-        onCancel={closeMapHandler}>
+        onCancel={closeMapHandler}
+      >
         <div className='map-container'>
           <Map center={coordinates} zoom={16} />
         </div>
@@ -68,7 +71,8 @@ const PlaceItem = props => {
             </Button>
           </>
         }
-        onCancel={cancelConfirmModalHandler}>
+        onCancel={cancelConfirmModalHandler}
+      >
         <p>
           Do you want to proceed and delete this place? Please note that it
           can't be undone thereafter.

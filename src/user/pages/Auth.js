@@ -63,7 +63,6 @@ const Auth = () => {
 
   const authSubmitHandler = event => {
     event.preventDefault()
-    console.log(formState.inputs)
     if (isLoginMode) {
       sendRequest(
         LOGIN_URL,
@@ -75,7 +74,7 @@ const Auth = () => {
         })
       )
         .then(res => {
-          auth.login(res.user.id)
+          auth.login(res.userId, res.token)
         })
         .catch(err => console.log(err))
     } else {
@@ -86,7 +85,7 @@ const Auth = () => {
       formData.append('image', formState.inputs.image.value)
       sendRequest(SIGNUP_URL, 'POST', {}, formData)
         .then(res => {
-          auth.login(res.user.id)
+          auth.login(res.userId, res.token)
         })
         .catch(err => console.log(err))
     }

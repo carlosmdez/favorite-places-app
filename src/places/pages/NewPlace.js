@@ -51,7 +51,12 @@ const NewPlace = () => {
     formData.append('address', formState.inputs.address.value)
     formData.append('image', formState.inputs.image.value)
     formData.append('creator', auth.userId)
-    sendRequest(CREATE_PLACE_URL, 'POST', {}, formData)
+    sendRequest(
+      CREATE_PLACE_URL,
+      'POST',
+      { Authorization: `Bearer ${auth.token}` },
+      formData
+    )
       .then(res => {
         history.push('/')
       })
