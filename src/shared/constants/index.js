@@ -1,4 +1,4 @@
-export const API_URL = 'http://localhost:5000'
+export const API_URL = process.env.REACT_APP_BACKEND_URL
 
 //User's API endpoints
 export const GET_USERS_URL = `${API_URL}/api/users`
